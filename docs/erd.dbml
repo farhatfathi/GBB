@@ -1,0 +1,343 @@
+// ─── CORE ────────────────────────────────────────────
+
+Table periode {
+  id varchar [pk]
+  nama varchar
+  goal text [note: 'goal kurikulum periode ini']
+  semester int [note: '1 = Jan-Jun, 2 = Jul-Des']
+  start_date date
+  end_date date
+  status varchar
+}
+
+Table users {
+  id varchar [pk]
+  nama varchar
+  email varchar [unique]
+  password_hash varchar
+  role varchar [note: 'admin | viewer | finance | pcm | anc | media']
+  divisi varchar
+  created_at timestamp
+}
+
+// ─── BESWAN ──────────────────────────────────────────
+
+Table beswan {
+  id varchar [pk]
+  nama_lengkap varchar
+  nim varchar [unique]
+  email varchar [unique]
+  hp varchar
+  cv_url varchar
+  foto_url varchar
+  password_hash varchar
+  created_at timestamp
+}
+
+Table beswan_periode {
+  id varchar [pk]
+  beswan_id varchar [ref: > beswan.id]
+  periode_id varchar [ref: > periode.id]
+  status varchar [note: 'aktif | alumni']
+}
+
+// ─── DONATUR ─────────────────────────────────────────
+
+Table donatur {
+  id varchar [pk]
+  kode varchar [unique, note: 'auto-generated, e.g. DLW12025 = [Inisial][Semester][Tahun]']
+  nama varchar
+  email varchar [unique]
+  hp varchar
+  organisasi varchar
+  nominal_default decimal [note: 'nominal default per bulan/skema']
+  skema varchar [note: 'bulanan | triwulan | satu_kali | lainnya']
+  password_hash varchar
+  created_at timestamp
+}
+
+Table donatur_periode {
+  id varchar [pk]
+  donatur_id varchar [ref: > donatur.id]
+  periode_id varchar [ref: > periode.id]
+  nominal decimal [note: 'nominal khusus periode ini, nullable = pakai default']
+  skema varchar [note: 'override skema jika berbeda per periode']
+  status varchar [note: 'aktif | tidak_aktif']
+
+  indexes {
+    (donatur_id, periode_id) [unique]
+  }
+}
+
+// ─── CASHFLOW ────────────────────────────────────────
+
+Table cashflow {
+  id varchar [pk]
+  sheet varchar [note: 'nama sheet BSI, e.g. Sept, Agt']
+  tanggal timestamp
+  bulan varchar [note: 'e.g. 2025-09']
+  ft_number varchar [unique]
+  deskripsi text
+  currency varchar [default: 'IDR']
+  nominal decimal
+  tipe varchar [note: 'cash_in | cash_out']
+
+  kat_bsi varchar [note: 'Donasi | Transfer | dll — dari BSI']
+
+  donatur_id varchar [ref: > donatur.id, note: 'nullable — hanya untuk cash_in']
+  donatur_periode_id varchar [ref: > donatur_periode.id, note: 'nullable — periode aktif donatur']
+
+  kategori varchar [note: 'Pencairan Beasiswa | Biaya Operasional | Tidak Terduga | Event']
+  sub_kategori varchar [note: 'Pembinaan | Komunikasi | Sistem & Media | Administrasi | dll']
+  keterangan varchar
+
+  status_klasifikasi varchar [note: 'inputted | pending | unknown']
+  periode_id varchar [ref: > periode.id, note: 'nullable']
+  created_at timestamp
+}
+
+// ─── MENTOR ──────────────────────────────────────────
+
+Table mentor {
+  id varchar [pk]
+  nama varchar
+  email varchar
+  hp varchar
+  linkedin_url varchar
+  cv_url varchar
+  bidang_keahlian varchar
+  is_internal boolean [note: 'true jika enabler GBB']
+  user_id varchar [ref: > users.id, note: 'nullable — jika internal']
+  created_at timestamp
+}
+
+// ─── KURIKULUM & EVENT ───────────────────────────────
+
+Table topik {
+  id varchar [pk]
+  periode_id varchar [ref: > periode.id]
+  urutan int
+  judul varchar
+  detail text
+  tor_url varchar
+  status varchar [note: 'planned | ongoing | done']
+}
+
+Table event {
+  id varchar [pk]
+  kode_event varchar [unique, note: 'e.g. EVT-BBB4-01']
+  topik_id varchar [ref: > topik.id, note: 'nullable — bisa event non-kurikulum']
+  nama_event varchar
+  tipe varchar [note: 'talkshow | growth | other']
+  format varchar [note: 'online | offline | hybrid']
+  lokasi varchar [note: 'link zoom / nama tempat']
+  tanggal date
+  jam_mulai time
+  jam_selesai time
+  deskripsi text
+  kapasitas int
+  jumlah_peserta int
+  youtube_url varchar
+  slide_url varchar
+  rekaman_tersedia boolean [default: false, note: 'alert jika false setelah selesai']
+  materi_tersedia boolean [default: false, note: 'alert jika false setelah selesai']
+  form_feedback_url varchar
+  status varchar [note: 'upcoming | done | cancelled']
+  created_at timestamp
+}
+
+Table event_mentor {
+  id varchar [pk]
+  event_id varchar [ref: > event.id]
+  mentor_id varchar [ref: > mentor.id]
+  peran varchar [note: 'speaker | moderator | fasilitator']
+}
+
+Table event_beswan {
+  id varchar [pk]
+  event_id varchar [ref: > event.id]
+  beswan_id varchar [ref: > beswan.id]
+  hadir boolean
+  catatan varchar
+}
+
+Table feedback_event {
+  id varchar [pk]
+  event_id varchar [ref: > event.id]
+  beswan_id varchar [ref: > beswan.id]
+  rating int
+  catatan text
+  submitted_at timestamp
+}
+
+// ─── LIBRARY ─────────────────────────────────────────
+
+Table library {
+  id varchar [pk]
+  event_id varchar [ref: > event.id, note: 'nullable']
+  nama varchar
+  deskripsi text
+  file_url varchar
+  ai_summary text
+  tags varchar
+  tipe varchar [note: 'event_materi | upload']
+  uploaded_by varchar [ref: > users.id, note: 'nullable']
+  created_at timestamp
+}
+
+Table topik_usulan {
+  id varchar [pk]
+  beswan_id varchar [ref: > beswan.id]
+  topik_usulan text
+  status varchar [note: 'pending | reviewed']
+  created_at timestamp
+}
+
+// ─── PENUGASAN ───────────────────────────────────────
+
+Table penugasan {
+  id varchar [pk]
+  kode_penugasan varchar [unique, note: 'e.g. TGS-BBB4-01']
+  event_id varchar [ref: > event.id, note: 'nullable — non-event jika null']
+  periode_id varchar [ref: > periode.id]
+  judul varchar
+  deskripsi text
+  deadline date
+  created_by varchar [ref: > users.id]
+  status varchar [note: 'aktif | selesai | expired']
+  created_at timestamp
+}
+
+Table hasil_penugasan {
+  id varchar [pk]
+  penugasan_id varchar [ref: > penugasan.id]
+  beswan_id varchar [ref: > beswan.id]
+  file_url varchar
+  submitted_at timestamp
+  status varchar [note: 'submitted | graded | late | belum_kumpul']
+
+  nilai float [note: 'nullable — diisi setelah dinilai']
+  feedback text [note: 'nullable — feedback per beswan dari enabler']
+  graded_at timestamp
+  graded_by varchar [ref: > users.id, note: 'nullable']
+}
+
+// ─── REFLEKSI & PRESTASI ─────────────────────────────
+
+Table refleksi {
+  id varchar [pk]
+  beswan_id varchar [ref: > beswan.id]
+  periode_id varchar [ref: > periode.id]
+  bulan int
+  tahun int
+  jawaban_json text [note: 'JSON dari form PCM & AnC']
+  transkrip_url varchar
+  submitted_at timestamp
+}
+
+Table prestasi {
+  id varchar [pk]
+  beswan_id varchar [ref: > beswan.id]
+  judul varchar
+  deskripsi text
+  kategori varchar [note: 'studi | organisasi | luar_kampus']
+  tanggal date
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table prestasi_file {
+  id varchar [pk]
+  prestasi_id varchar [ref: > prestasi.id]
+  file_url varchar
+  tipe varchar [note: 'sertifikat | foto']
+  created_at timestamp
+}
+
+// ─── MENTOR REQUEST ──────────────────────────────────
+
+Table mentor_request {
+  id varchar [pk]
+  beswan_id varchar [ref: > beswan.id]
+  mentor_id varchar [ref: > mentor.id, note: 'nullable — jika belum nembak']
+  curhat_text text [note: 'nullable — clue jika belum nembak']
+  status varchar [note: 'pending | matched | done']
+  created_at timestamp
+  responded_at timestamp
+}
+
+// ─── LAPORAN & NOTIFIKASI ────────────────────────────
+
+Table laporan {
+  id varchar [pk]
+  judul varchar
+  tipe varchar [note: 'booklet | laporan_keuangan | dll']
+  file_url varchar
+  periode_id varchar [ref: > periode.id, note: 'nullable']
+  is_public boolean
+  created_at timestamp
+}
+
+Table notifikasi {
+  id varchar [pk]
+  recipient_type varchar [note: 'beswan | user | donatur']
+  recipient_id varchar
+  tipe varchar
+  pesan text
+  is_read boolean
+  ref_table varchar
+  ref_id varchar
+  created_at timestamp
+}
+
+// ─── TABLE GROUPS ────────────────────────────────────
+
+TableGroup "Core" {
+  periode
+  users
+}
+
+TableGroup "Beswan" {
+  beswan
+  beswan_periode
+  refleksi
+  prestasi
+  prestasi_file
+}
+
+TableGroup "Donatur" {
+  donatur
+  donatur_periode
+}
+
+TableGroup "Keuangan" {
+  cashflow
+}
+
+TableGroup "Mentor" {
+  mentor
+  mentor_request
+}
+
+TableGroup "Kurikulum & Event" {
+  topik
+  event
+  event_mentor
+  event_beswan
+  feedback_event
+}
+
+TableGroup "Penugasan" {
+  penugasan
+  hasil_penugasan
+}
+
+TableGroup "Library" {
+  library
+  topik_usulan
+}
+
+TableGroup "Sistem" {
+  laporan
+  notifikasi
+}
