@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ─── GBB Design Tokens (Dark-first) ─── */
+
+    /* Surface / Background */
+    --background: #101415;
+    --foreground: #e0e3e5;
+    --surface: #101415;
+    --surface-dim: #101415;
+    --surface-bright: #363a3b;
+    --surface-container-low: #191c1e;
+    --surface-container: #1d2022;
+    --surface-container-high: #272a2c;
+
+    /* Card (Glass Tile) */
+    --card: #1d2022;
+    --card-foreground: #e0e3e5;
+
+    /* Popover */
+    --popover: #1d2022;
+    --popover-foreground: #e0e3e5;
+
+    /* Primary (Impact Blue) */
+    --primary: #adc7ff;
+    --primary-foreground: #002e68;
+    --primary-container: #4a8eff;
+
+    /* Secondary (Momentum Orange) */
+    --secondary: #ffb59a;
+    --secondary-foreground: #5b1b00;
+    --secondary-container: #cd4802;
+
+    /* Muted */
+    --muted: #272a2c;
+    --muted-foreground: #8b90a0;
+
+    /* Accent */
+    --accent: #272a2c;
+    --accent-foreground: #e0e3e5;
+
+    /* Destructive / Error */
+    --destructive: #ffb4ab;
+    --destructive-foreground: #690005;
+
+    /* Border & Input */
+    --border: #414754;
+    --input: #414754;
+    --ring: #adc7ff;
+
+    /* Sidebar */
+    --sidebar: #0b0f10;
+    --sidebar-foreground: #e0e3e5;
+    --sidebar-primary: #adc7ff;
+    --sidebar-primary-foreground: #002e68;
+    --sidebar-accent: #1d2022;
+    --sidebar-accent-foreground: #e0e3e5;
+    --sidebar-border: #414754;
+    --sidebar-ring: #adc7ff;
+
+    /* Radius */
+    --radius: 1rem;
+
+    /* Chart */
+    --chart-1: #adc7ff;
+    --chart-2: #ffb59a;
+    --chart-3: #bec6e0;
+    --chart-4: #4a8eff;
+    --chart-5: #cd4802;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+/* ─── Typography ─── */
+@layer components {
+  .text-headline-xl {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 68px;
+    letter-spacing: -0.02em;
+  }
+
+  .text-headline-lg {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 52px;
+    letter-spacing: -0.01em;
+  }
+
+  .text-headline-md {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+  }
+
+  .text-body-lg {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+  }
+
+  .text-body-md {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  .text-label-md {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  /* Glass Tile effect */
+  .glass-tile {
+    @apply bg-card border border-white/10 backdrop-blur-sm;
+    border-radius: var(--radius);
+  }
+
+  /* Ambient glow */
+  .glow-primary {
+    box-shadow: 0 0 20px rgba(173, 199, 255, 0.3);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 20px rgba(255, 181, 154, 0.3);
+  }
+}

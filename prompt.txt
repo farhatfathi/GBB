@@ -1,0 +1,280 @@
+saya akan membuat portal web beassiwa GBB  dengan vibe coding. saya akan memberikan informasi terkait GBB dan goalnya sehingga kamu punya konteks nya untuk membuatkan kode web yg dibutuhkan. buatkan planningnya dalam PRD.md dan implementation plan.md. secara umum tahapannya adalah front end dan back end. kita akan selalu merefer planning sehingga kita tidak lanjut ke tahap selanjutnya sampai saya mengkonfirmasi itu. berikut infonya: GBB (Gerakan Baik Berdampak)
+
+Yayasan Gerakan Baik Berdampak (No. AHU-0010854.AH.01.04.Tahun 2024) adalah yayasan beasiswa resmi yang menjalankan program Beasiswa Baik Berdampak (BBB) untuk mahasiswa aktif Universitas Diponegoro [[1]]. Didirikan oleh 10 alumni muda Undip, konsep utamanya adalah patungan donasi alumni — dengan motto #10AlumniBantuSatu, di mana alumni menyisihkan mulai dari Rp100.000/bulan untuk membiayai UKT atau penelitian akhir mahasiswa yang kesulitan finansial [[1]].
+
+Programnya bukan sekadar uang. Beswan (penerima beasiswa) juga mendapat talkshow dan penugasan pengembangan diri [[1]][[2]]. Overview
+Portal Internal
+Goals:
+
+Memudahkan pekerjaan Tim Finance & AnC✅
+
+Memusatkan dokumentasi seluruh data, brief, materi & kegiatan tim program
+
+Donatur, Program & Financial Executive Summary ✅
+
+Data Source
+
+Manual Input:
+a. Beswan,
+b. Kurikulum
+c. Mentor,
+d. Event,
+e. Penugasan,
+f. Feedback Penugasan
+g. Library
+
+Form Feedback Peserta Event
+
+Form Pendaftaran Growth
+
+Portal Beswan
+Goals:
+
+Memusatkan dokumentasi seluruh data, brief, materi & kegiatan beswan
+
+Mendapatkan data beswan untuk di update ke donatur.
+
+Studi
+
+Organisasi & kepanitiaan
+
+Luar Kampus
+
+Data Source
+
+Manual Input:
+a. Kegiatan
+b. Prestasi
+
+Database Event
+
+Database Mentor
+
+Database Penugasan
+
+Database Feedback Penugasan
+
+Database Libray
+
+Portal Donatur
+Goals:
+
+Memberikan informasi keuangan kepada donatur
+
+Memberikan apresiasi kepada donator
+
+Progress event, kegiatan & prestasi beswan
+
+Data Source
+
+Manual Input:
+a. Database Mentor
+
+Database Event
+
+Database Mentor
+
+Database Penugasan
+
+Database Feedback Penugasan. 
+
+---------------
+
+summary mvp
+
+Summary Portal GBB
+Program (6)
+
+Database Beswan
+
+Kurikulum & Library
+
+Database Mentor
+
+Event Talkshow
+
+Penugasan
+
+Dashboard
+a) Event
+b) Growth
+c) Beswan
+
+FITUR UTAMA (MVP) PROGRAM
+1. Database Beswan [Most complex #2]
+
+Format database. Komponen: Metric-metric, database beswan, bar search & filter
+
+Mengelola beswan: Filter, Upload CV, credential login portal beswan, Adding period beswan GBB (can be more than 1), dan very detail termasuk update kegiatan-kegiatan dia bisa dicek disini
+
+Rapor: Ada absensi per event, refleksi (dari Portal Beswan) untuk setiap beswan (sheet database absensi terpisah, ada kolom event buat manggil)
+
+2. Kurikulum & Library
+Kurikulum: Kurikulum Beasiswa per periode
+
+Dibagi per periode
+
+Input Goal, Topik, Detail Topik, TORnya, per periode.
+
+Kalau sudah terlaksana, link youtube & slide muncul
+
+Library: Perpustakaan materi-materi bagus. soon be developed for RAG
+
+Komponen: Metric-metric, database library, bar search & filter
+
+Source: materi event, materi upload
+
+Fitur Upload Materi, di summary AI, auto-tagging topic (bisa diedit jg) & masuk ke database,
+
+3. Database Mentor
+
+Format database. Komponen: Metric-metric, database mentor, bar search & filter
+
+Mengelola Mentor: Filter, Upload CV, history ngisi event, hasil feedback form extracted per mentor
+
+4. Event Talkshow: Mengelola Event dari awal-evaluasi based on Kurikulum & database mentor
+
+Format database. Komponen: Metric-metric, database event, bar search & filter
+
+Kasih alert untuk event selesai yang belum ada Link rekaman youtube & materi
+
+5. Penugasan: Membuat tugas dari event yang terlaksana [Most complex #1]
+
+Format database. Komponen: Metric-metric, database penugasan, database hasil penugasan, bar search & filter
+
+Saat munculin penugasan, itu harus milih batch mana, setelh milih batch, user milih event, tapi bisa juga itu tugas yg non event
+
+Penugasan dijabarkan flownya, ada penjelasan penggunaan fitur penugasan dari membuat sampai menilai, bisa ngasih feedback per beswan Ketika sudah ada hasil
+
+Database penugasan: list tugas, kita udah pernah ngasi tugas apa aja. (Keliatan tagging kode eventnya & tgl nya) . Bisa juga bikin tugas not by event disini. Disetiap data, bisa dlihat siapa yang udah ngumpulin dan yang belum,
+
+Database Hasil Penugasan; ini kalau jawaban udah disubmit beswan. Semuanya muncul disini. Kalau mau ngasih feedback dan menilai disini. (Keliatan tagging kode penugasan & tglnya)
+
+Database Penugasan & Database Hasil Penugasan bisa kamu pasang dengan pola master-detail: klik 1 row tugas di tabel kiri/atas → expand detail hasil beswan di kanan/bawah. Jadi 2 database tetap ada tapi gak compete for attention.
+
+6. Dashboard
+
+Event : Kembangkan based on data
+
+Growth : Kembangkan based on data
+
+Beswan : Kembangkan based on data
+
+-------
+
+Summary Portal Beswan
+Portal Beswan
+
+Beranda
+a) My Events
+b) My Tasks
+c) Prestasiku
+
+Library Materi
+
+Mentor
+
+Refleksi Bulanan
+
+FITUR UTAMA (MVP) BESWAN
+1 Beranda [Most complex #1]
+
+Greetings, Auto berubah setiap hari, kasih pesan menarik, but don't use AI, just If-Else 5 pilihan
+
+My Events: history keikutsertaan events, button slide & video (kalua ngga ada, buttonnnya pucet/gelap)
+
+My Task: list tugas, tgl, pdf, ada tempat upload file, done not done, if done, telah dinilai or belum dinilai.
+
+2 Library Materi
+
+Persis sama dengan library GBB, tapi fitur add materinya di ganti jadi :
+
+usulan topik materi
+
+3 Mentor
+
+Persis sama dengan database mentor tapi infonya terbatas, tidak ada no HP, tidak ada CV
+
+Kasih notes “bila membutuhkan kontak hubungi tim Program GBB”
+
+request meminta 1 on 1 (udah nembak mentor)
+
+Bisa juga request 1 on 1 (belum nembak, tapi ngasih clue/curhat about things) harapannya fitur ini ngasih pyschological touch
+
+Semua tim internal GBB dijadiin mentor
+
+4 Refleksi Bulanan
+
+Refleksi (ada dropdown perbulan) & Prestasi
+
+Komponen: Form, Database Refleksi
+
+Form berisi pertanyaan & checklist dari PCM & AnC (please ask)
+
+Upload Dokumen Transkrip.
+
+Prestasiku: Database Format, fitur input prestasi, alert untuk update baru per 3 bulan set in every end of quarter, upload sertifikat/foto (wajib & bisa bbrp file)
+
+Alert untuk refleksi wajib setiap bulan, bulan ini harus konek dengan periode batch (Dimana batch menyimpan data bulan awal-bulan akhir) recall ke konfigurasi.
+
+Profile
+
+Update data pribadi, Nama Lengkap, NIM, EMAIL, HP (set wajib), update CV.
+
+------
+Summary Portal Donatur
+Portal Donatur
+
+Beranda
+
+Daftar Mentor!
+
+Dashboard
+
+Data & Kegiatan Beswan
+
+Laporan GBB
+
+Profile
+
+FITUR UTAMA (MVP) DONATUR
+1 Beranda [Most complex #1]
+
+Greatings, Auto berubah setiap hari, kasih pesan menarik, but don’t use AI, just If-Else
+
+Donatur langsung tahu berapa jumlah donasi yang dia berikna, History Konsistensi Donasinya & keikutsertaan batchnya
+
+Higlihst Posringa2 IG Gerakan Baik Berdampak (kyk di WEB)
+
+2 Daftar Mentor!
+Menyampaikan ke Donatur kita butuh mentor untuk agenda growth & mentoring beswan, ada merchandise menarik :
+
+Metric Jumlah Mentor GBB hari ini
+
+Form pendaftaran Mentor (ada upload CV & Linkedln)
+
+3 Dashboard GBB
+Menyampaikan ke Donatur, apa aja yang udah done by GBB
+
+Dash Finansial : ada narasi tentang kondisi keuangan GBB
+
+Dash Beswan :
+
+Dash Event
+
+4 Data & Kegiatan Beswan
+
+Kalau dia donatur di periode x dia bisa liat data & kegiatan beswan (ada filternya)
+
+Ada nama beswan & update kegiatan, prestasi & refleksi
+
+5 Laporan GBB
+
+Segala Laporan GBB, Booklet, dll
+
+6 Profile ( bukan menu tapi ada di bagian paling bawah)
+
+Reset password
+
+-----
+userflow, ERD, front end (ASCII), color palette, font akan kita bahas setelah ini.
